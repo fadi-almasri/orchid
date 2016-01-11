@@ -105,6 +105,16 @@ def write_data(clean_data, env):
         data_file.writelines(i + '\n')
     data_file.close()
 
+
+def get_pipelined_projects():
+    pipelined_projects = []
+    jenkins = initiate_connection()
+    projects = jenkins.get_jobs()
+    for project in projects:
+        if project[0].startswith('a_'):
+            pipelined_projects.append(project)
+    return pipelined_projects
+
 if __name__ == '__main__':
     dt = parser.parse("Jan 8 2016 12:00AM")
     week_dates = get_week_range(dt)
