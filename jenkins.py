@@ -2,6 +2,7 @@ import jenkinsapi
 import pprint
 from datetime import timedelta
 import datetime
+from dateutil import parser
 import Queue
 from collections import Counter
 
@@ -17,7 +18,7 @@ class jenkins_builds(object):
 
 
 def initiate_connection():
-    server = jenkinsapi.jenkins.Jenkins('http://192.168.0.200:8080/')
+    server = jenkinsapi.jenkins.Jenkins('http://172.20.78.88/')
     return server
 
 
@@ -105,8 +106,10 @@ def write_data(clean_data, env):
     data_file.close()
 
 if __name__ == '__main__':
-    week_dates = get_week_range(datetime.datetime.now())
-    builds = get_this_week_builds(week_dates, 'test-job')
+    dt = parser.parse("Jan 8 2016 12:00AM")
+    week_dates = get_week_range(dt)
+    print week_dates
+    builds = get_this_week_builds(week_dates, 'promote-dev')
     successeful_builds = filter_successful_builds(builds)
     mapped_reduced_data = map_reduce(successeful_builds)
     clean_data = fill_the_gaps(mapped_reduced_data)
